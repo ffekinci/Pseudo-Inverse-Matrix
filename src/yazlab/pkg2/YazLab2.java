@@ -27,7 +27,7 @@ public class YazLab2 {
             System.out.println("");
 
         }
-//        System.out.println(matris.length+ "- " + matris[0].length);
+
         int [][] returnMultip = Multiplication(returnMatris, matris);
         
         for (int i = 0; i < returnMultip.length; i++) {

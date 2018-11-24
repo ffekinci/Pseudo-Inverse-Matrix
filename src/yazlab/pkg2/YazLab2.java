@@ -19,23 +19,23 @@ public class YazLab2 {
         int matris[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}};
         //System.out.println(matris.length + " - " + matris[0].length);
         int[][] returnMatris = Transpose(matris);
-//        for (int i = 0; i < matris[0].length; i++) {
-//            for (int j = 0; j < matris.length; j++) {
-//                System.out.println(returnMatris[i][j]);
-//
-//            }
-//            System.out.println("");
-//
-//        }
-        System.out.println(matris.length+ "- " + matris[0].length);
-        int [][] returnMultip = Multiplication(matris, returnMatris);
+        for (int i = 0; i < matris[0].length; i++) {
+            for (int j = 0; j < matris.length; j++) {
+                System.out.print(returnMatris[i][j]+" ");
+
+            }
+            System.out.println("");
+
+        }
+//        System.out.println(matris.length+ "- " + matris[0].length);
+        int [][] returnMultip = Multiplication(returnMatris, matris);
         
         for (int i = 0; i < returnMultip.length; i++) {
             for (int j = 0; j < returnMultip.length; j++) {
-                System.out.println(returnMultip[i][j]);
+                System.out.print(returnMultip[i][j]+" ");
                 
             }
-            System.out.println("");
+            System.out.println();
             
         }
         

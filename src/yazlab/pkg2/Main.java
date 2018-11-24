@@ -21,6 +21,28 @@ public class Main extends javax.swing.JFrame {
         initComponents();
     }
 
+    int[][] Transpose(int[][] matris) {
+        int[][] newMatris = new int[matris[0].length][matris.length];
+        for (int i = 0; i < matris.length; i++) {
+            for (int j = 0; j < matris[0].length; j++) {
+                newMatris[j][i] = matris[i][j];
+            }
+        }
+        return newMatris;
+
+    }
+    
+    void PrintMatrix(int [][] matrix){
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                System.out.print(matrix[i][j]+" "); 
+            }
+            System.out.println();
+            
+        }
+        
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -124,15 +146,14 @@ public class Main extends javax.swing.JFrame {
 
         int[][] matris = new int[rows][column];
         int value;
-        
+
         for (int i = 0; i < matris.length; i++) {
             for (int j = 0; j < matris[0].length; j++) {
                 String tmp = JOptionPane.showInputDialog("Matris[" + i + "][" + j + "] elemanını giriniz: ");
                 value = Integer.parseInt(tmp);
             }
         }
-        
-        
+
 
     }//GEN-LAST:event_jButton2ActionPerformed
 

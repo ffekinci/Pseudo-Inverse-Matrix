@@ -20,6 +20,27 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
     }
+    
+    int[][] Multiplication(int [][]m, int [][]m2){
+        int [][]matris = new int[m.length][m2[0].length];
+        
+        for (int i = 0; i < m.length; i++) {
+            for (int j = 0; j < m2[0].length; j++) {
+                int tmp = 0;
+                for (int k = 0; k < m[0].length; k++) {
+                    tmp += m[i][k] * m2[k][j];
+                    
+                }
+                matris[i][j] = tmp;               
+                System.out.print(matris[i][j]+" ");
+            }
+            System.out.println("");
+            
+        }
+        
+        
+        return matris;
+    }
 
     int[][] Transpose(int[][] matris) {
         int[][] newMatris = new int[matris[0].length][matris.length];

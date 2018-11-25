@@ -5,8 +5,12 @@
  */
 package yazlab.pkg2;
 
+import java.awt.GridLayout;
+import static java.lang.Math.pow;
 import java.util.Random;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -14,31 +18,52 @@ import javax.swing.JOptionPane;
  */
 public class Main extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Main
-     */
+    private javax.swing.JTextField[] text = new JTextField[25];
+    int matris[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}};
+    
     public Main() {
         initComponents();
-    }
-    
-    int[][] Multiplication(int [][]m, int [][]m2){
-        int [][]matris = new int[m.length][m2[0].length];
+        jL_M.setVisible(false);
+        jL_N.setVisible(false);
         
+        MatrixGUI(4, 3, matris, jPanel1); //ters :(
+
+    }
+
+    void MatrixGUI(int rows, int column, int[][] matrix, JPanel jp) {
+        jp.setLayout(new GridLayout(0, column, 20, 20));
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < column; j++) {
+                
+                text[i] = new javax.swing.JTextField();
+                text[i].setText(""+matrix[i][j]);
+                jp.add(text[i]);
+
+            }   
+            
+            jp.revalidate();
+            jp.repaint();
+
+        }
+    }
+
+    int[][] Multiplication(int[][] m, int[][] m2) {
+        int[][] matris = new int[m.length][m2[0].length];
+
         for (int i = 0; i < m.length; i++) {
             for (int j = 0; j < m2[0].length; j++) {
                 int tmp = 0;
                 for (int k = 0; k < m[0].length; k++) {
                     tmp += m[i][k] * m2[k][j];
-                    
+
                 }
-                matris[i][j] = tmp;               
-                System.out.print(matris[i][j]+" ");
+                matris[i][j] = tmp;
+                System.out.print(matris[i][j] + " ");
             }
             System.out.println("");
-            
+
         }
-        
-        
+
         return matris;
     }
 
@@ -52,16 +77,16 @@ public class Main extends javax.swing.JFrame {
         return newMatris;
 
     }
-    
-    void PrintMatrix(int [][] matrix){
+
+    void PrintMatrix(int[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
-                System.out.print(matrix[i][j]+" "); 
+                System.out.print(matrix[i][j] + " ");
             }
             System.out.println();
-            
+
         }
-        
+
     }
 
     /**
@@ -73,26 +98,44 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jB_Random = new javax.swing.JButton();
+        jB_Manuel = new javax.swing.JButton();
+        jL_M = new javax.swing.JLabel();
+        jL_N = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Rastgele");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jB_Random.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jB_Random.setText("Rastgele");
+        jB_Random.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jB_RandomActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton2.setText("Manuel");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jB_Manuel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jB_Manuel.setText("Manuel");
+        jB_Manuel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jB_ManuelActionPerformed(evt);
             }
         });
+
+        jL_M.setText("Pseudo Inverse = (A^t x A)^-1 x A^t");
+
+        jL_N.setText("Pseudo Inverse = A^t x (A x A^t)^-1");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 257, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 212, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,25 +143,37 @@ public class Main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jB_Random, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(844, Short.MAX_VALUE))
+                .addComponent(jB_Manuel, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jL_N, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jL_M, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(53, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(830, 830, 830))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(540, Short.MAX_VALUE))
+                    .addComponent(jB_Random, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jB_Manuel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jL_N, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jL_M, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(72, 72, 72)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(256, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jB_RandomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_RandomActionPerformed
         // TODO add your handling code here:
         int rows, column;
         Random rand = new Random();
@@ -132,8 +187,8 @@ public class Main extends javax.swing.JFrame {
 
         int[][] matris = new int[rows][column];
 
-        for (int i = 0; i < matris.length; i++) {
-            for (int j = 0; j < matris[0].length; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < column; j++) {
                 matris[i][j] = rand.nextInt(50);
                 System.out.print(matris[i][j] + " ");
             }
@@ -143,10 +198,17 @@ public class Main extends javax.swing.JFrame {
 
         System.out.println(rows + " - " + column);
 
+        if (rows > column) {
+            jL_M.setVisible(true);
+            jL_N.setVisible(false);
+        } else {
+            jL_M.setVisible(false);
+            jL_N.setVisible(true);
+        }
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jB_RandomActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jB_ManuelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_ManuelActionPerformed
         // TODO add your handling code here:
         int rows, column;
 
@@ -171,12 +233,19 @@ public class Main extends javax.swing.JFrame {
         for (int i = 0; i < matris.length; i++) {
             for (int j = 0; j < matris[0].length; j++) {
                 String tmp = JOptionPane.showInputDialog("Matris[" + i + "][" + j + "] elemanını giriniz: ");
-                value = Integer.parseInt(tmp);
+                matris[i][j] = Integer.parseInt(tmp);
             }
         }
 
+        if (rows > column) {
+            jL_M.setVisible(true);
+            jL_N.setVisible(false);
+        } else {
+            jL_M.setVisible(false);
+            jL_N.setVisible(true);
+        }
 
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jB_ManuelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -214,7 +283,10 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jB_Manuel;
+    private javax.swing.JButton jB_Random;
+    private javax.swing.JLabel jL_M;
+    private javax.swing.JLabel jL_N;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

@@ -28,36 +28,57 @@ public class YazLab2 {
 
         }
 
-        int [][] returnMultip = Multiplication(returnMatris, matris);
+         Multiplication(matris, returnMatris);
         
-        for (int i = 0; i < returnMultip.length; i++) {
-            for (int j = 0; j < returnMultip.length; j++) {
-                System.out.print(returnMultip[i][j]+" ");
-                
-            }
-            System.out.println();
-            
-        }
+//        for (int i = 0; i < returnMultip.length; i++) {
+//            for (int j = 0; j < returnMultip.length; j++) {
+//                System.out.print(returnMultip[i][j]+" ");
+//                
+//            }
+//            System.out.println();
+//            
+//        }
         
     }
 
-    static int[][] Multiplication(int[][] m, int[][] m2) {
-        int matrix[][] = new int[m[0].length][m2.length];
-        System.out.println(m[0].length +" - "+m2.length);
-        for (int i = 0; i < matrix.length; i++) {
-
-            for (int j = 0; j < matrix.length; j++) {
-                int multip = 0;
-                for (int k = 0; k < matrix.length; k++) {
-                    multip += m[i][k] * m2[k][j];
-
+//    static int[][] Multiplication(int[][] m, int[][] m2) {
+//        int matrix[][] = new int[m[0].length][m2.length];
+//        System.out.println(m[0].length +" - "+m2.length);
+//        for (int i = 0; i < matrix.length; i++) {
+//
+//            for (int j = 0; j < matrix.length; j++) {
+//                int multip = 0;
+//                for (int k = 0; k < matrix.length; k++) {
+//                    multip += m[i][k] * m2[k][j];
+//
+//                }
+//                matrix[i][j] = multip;
+//            }
+//
+//        }
+//
+//        return matrix;
+//    }
+    
+    static int[][] Multiplication(int [][]m, int [][]m2){
+        int [][]matris = new int[m.length][m2[0].length];
+        
+        for (int i = 0; i < m.length; i++) {
+            for (int j = 0; j < m2[0].length; j++) {
+                int tmp = 0;
+                for (int k = 0; k < m[0].length; k++) {
+                    tmp += m[i][k] * m2[k][j];
+                    
                 }
-                matrix[i][j] = multip;
+                matris[i][j] = tmp;               
+                System.out.print(matris[i][j]+" ");
             }
-
+            System.out.println("");
+            
         }
-
-        return matrix;
+        
+        
+        return matris;
     }
 
     static int[][] Transpose(int[][] matris) {

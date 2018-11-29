@@ -5,9 +5,13 @@
  */
 package yazlab.pkg2;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridLayout;
 import static java.lang.Math.pow;
+import java.text.DecimalFormat;
 import java.util.Random;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -19,56 +23,131 @@ import javax.swing.JTextField;
 public class Main extends javax.swing.JFrame {
 
     private javax.swing.JTextField[] text = new JTextField[25];
-    int matris[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}};
+
+    int toplama=0,carpma=0,dongu=0;
     
     public Main() {
         initComponents();
         jL_M.setVisible(false);
         jL_N.setVisible(false);
         
-        MatrixGUI(4, 3, matris, jPanel1); //ters :(
-
+        ControlLabel(false);
+        
+        
     }
 
-    void MatrixGUI(int rows, int column, int[][] matrix, JPanel jp) {
+    public void ControlLabel(boolean x){
+        jPanel1.setVisible(x);
+        jL_1.setVisible(x);
+        jL_2.setVisible(x);
+        jLabel1.setVisible(x);
+        jLabel4.setVisible(x);
+        jLabel5.setVisible(x);
+        jLabel6.setVisible(x);
+        jLabel7.setVisible(x);
+        jLabel8.setVisible(x);
+    }
+    
+    public double[][] MatrixInverse(double[][] m) {
+        double[][] birim = new double[m.length][m.length];
+
+        for (int i = 0; i < birim.length; i++) {
+            for (int j = 0; j < birim.length; j++) {
+                if (i == j) {
+                    birim[i][j] = 1;
+                } else {
+                    birim[i][j] = 0;
+                }
+            }
+        }
+        double a, b;
+
+        for (int i = 0; i < birim.length; i++) {
+
+            a = m[i][i];
+            for (int j = 0; j < birim.length; j++) {
+                m[i][j] = m[i][j] / a;
+                birim[i][j] = birim[i][j] / a;
+                carpma+=2;
+                dongu++;
+
+            }
+
+            for (int j = 0; j < birim.length; j++) {
+                if (j != i) {
+                    b = m[j][i];
+                    for (int k = 0; k < birim.length; k++) {
+                        m[j][k] = m[j][k] - (m[i][k] * b);
+                        birim[j][k] = birim[j][k] - (birim[i][k] * b);
+                        carpma+=2;
+                        dongu++;
+
+                    }
+                }
+
+            }
+        }
+
+        return birim;
+    }
+
+    public void matrisyaz(double matris[][]) {
+        for (int i = 0; i < matris.length; i++) {
+            for (int j = 0; j < matris[0].length; j++) {
+                System.out.print(matris[i][j] + "  ");
+            }
+            System.out.println("");
+        }
+    }
+
+    public double[][] matriscarp(double matris1[][], double matris2[][]) {
+        double toplam = 0;
+        double matris[][] = new double[matris1.length][matris2[0].length];
+
+        for (int i = 0; i < matris1.length; i++) {
+            for (int j = 0; j < matris2[0].length; j++) {
+                for (int k = 0; k < matris2.length; k++) {
+                    toplam += matris1[i][k] * matris2[k][j];
+                    toplama++;
+                    carpma++;
+                    dongu++;
+                }
+                matris[i][j] = toplam;
+                toplam = 0;
+            }
+        }
+        return matris;
+    }
+
+   
+
+    void MatrixGUI(int rows, int column, double[][] matrix, JPanel jp) {
         jp.setLayout(new GridLayout(0, column, 20, 20));
-        for (int i = 0; i < rows; i++) {
+        jp.removeAll();
+        for (int i = 0; i < rows; i++) {            
             for (int j = 0; j < column; j++) {
-                
+
                 text[i] = new javax.swing.JTextField();
-                text[i].setText(""+matrix[i][j]);
+                 
+                text[i].setText(" " +new DecimalFormat("#####.###").format(matrix[i][j]));
+//                text[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+//                text[i].setAlignmentY(Component.CENTER_ALIGNMENT);
+                
                 jp.add(text[i]);
 
-            }   
-            
+            }
+//            jp.setAlignmentY(Component.CENTER_ALIGNMENT);
+
             jp.revalidate();
             jp.repaint();
 
         }
     }
 
-    int[][] Multiplication(int[][] m, int[][] m2) {
-        int[][] matris = new int[m.length][m2[0].length];
+    
 
-        for (int i = 0; i < m.length; i++) {
-            for (int j = 0; j < m2[0].length; j++) {
-                int tmp = 0;
-                for (int k = 0; k < m[0].length; k++) {
-                    tmp += m[i][k] * m2[k][j];
-
-                }
-                matris[i][j] = tmp;
-                System.out.print(matris[i][j] + " ");
-            }
-            System.out.println("");
-
-        }
-
-        return matris;
-    }
-
-    int[][] Transpose(int[][] matris) {
-        int[][] newMatris = new int[matris[0].length][matris.length];
+    double[][] Transpose(double[][] matris) {
+        double[][] newMatris = new double[matris[0].length][matris.length];
         for (int i = 0; i < matris.length; i++) {
             for (int j = 0; j < matris[0].length; j++) {
                 newMatris[j][i] = matris[i][j];
@@ -78,16 +157,7 @@ public class Main extends javax.swing.JFrame {
 
     }
 
-    void PrintMatrix(int[][] matrix) {
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                System.out.print(matrix[i][j] + " ");
-            }
-            System.out.println();
-
-        }
-
-    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -102,7 +172,25 @@ public class Main extends javax.swing.JFrame {
         jB_Manuel = new javax.swing.JButton();
         jL_M = new javax.swing.JLabel();
         jL_N = new javax.swing.JLabel();
+        jL_1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jL_2 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jP_1 = new javax.swing.JPanel();
+        jP_2 = new javax.swing.JPanel();
+        jP_3 = new javax.swing.JPanel();
+        jP_4 = new javax.swing.JPanel();
+        jP_5 = new javax.swing.JPanel();
+        jP_6 = new javax.swing.JPanel();
+        jP_7 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
+        jL_Carp = new javax.swing.JLabel();
+        jL_top = new javax.swing.JLabel();
+        jL_Dongu = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,15 +214,110 @@ public class Main extends javax.swing.JFrame {
 
         jL_N.setText("Pseudo Inverse = A^t x (A x A^t)^-1");
 
+        jL_1.setText("A^t x A = ");
+
+        jLabel5.setText("=");
+
+        jLabel4.setText("X");
+
+        jLabel1.setText("= B");
+
+        jL_2.setText("B^-1 * A^t = ");
+
+        jLabel6.setText("X");
+
+        jLabel7.setText("B^-1 = ");
+
+        jLabel8.setText("=");
+
+        javax.swing.GroupLayout jP_1Layout = new javax.swing.GroupLayout(jP_1);
+        jP_1.setLayout(jP_1Layout);
+        jP_1Layout.setHorizontalGroup(
+            jP_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jP_1Layout.setVerticalGroup(
+            jP_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jP_2Layout = new javax.swing.GroupLayout(jP_2);
+        jP_2.setLayout(jP_2Layout);
+        jP_2Layout.setHorizontalGroup(
+            jP_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jP_2Layout.setVerticalGroup(
+            jP_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jP_3Layout = new javax.swing.GroupLayout(jP_3);
+        jP_3.setLayout(jP_3Layout);
+        jP_3Layout.setHorizontalGroup(
+            jP_3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jP_3Layout.setVerticalGroup(
+            jP_3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jP_4Layout = new javax.swing.GroupLayout(jP_4);
+        jP_4.setLayout(jP_4Layout);
+        jP_4Layout.setHorizontalGroup(
+            jP_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jP_4Layout.setVerticalGroup(
+            jP_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jP_5Layout = new javax.swing.GroupLayout(jP_5);
+        jP_5.setLayout(jP_5Layout);
+        jP_5Layout.setHorizontalGroup(
+            jP_5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jP_5Layout.setVerticalGroup(
+            jP_5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jP_6Layout = new javax.swing.GroupLayout(jP_6);
+        jP_6.setLayout(jP_6Layout);
+        jP_6Layout.setHorizontalGroup(
+            jP_6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jP_6Layout.setVerticalGroup(
+            jP_6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jP_7Layout = new javax.swing.GroupLayout(jP_7);
+        jP_7.setLayout(jP_7Layout);
+        jP_7Layout.setHorizontalGroup(
+            jP_7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jP_7Layout.setVerticalGroup(
+            jP_7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 257, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 212, Short.MAX_VALUE)
+            .addGap(0, 13, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -143,31 +326,117 @@ public class Main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(jB_Random, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jB_Manuel, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jL_N, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jL_M, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(53, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(830, 830, 830))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jL_1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jP_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
+                        .addGap(25, 25, 25)
+                        .addComponent(jP_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jP_3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel1)
+                        .addGap(66, 66, 66)
+                        .addComponent(jLabel7)
+                        .addGap(18, 18, 18)
+                        .addComponent(jP_4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 855, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jL_2)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jP_5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel6)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jP_6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel8)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jP_7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jB_Random, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jB_Manuel, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(37, 37, 37)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jL_N, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jL_M, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(94, 94, 94)
+                                        .addComponent(jL_top, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(141, 141, 141)
+                                        .addComponent(jL_Carp, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(136, 136, 136)
+                                        .addComponent(jL_Dongu, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jB_Random, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jB_Manuel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jL_N, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jL_M, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(72, 72, 72)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jB_Random, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jB_Manuel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jL_N, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jL_M, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jL_top, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jL_Dongu, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jL_Carp, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(79, 79, 79)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jL_1))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jP_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jP_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jP_3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel5))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(40, 40, 40)
+                            .addComponent(jLabel7))
+                        .addComponent(jP_4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(75, 75, 75)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(256, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jL_2)
+                        .addGap(45, 45, 45))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(46, 46, 46))
+                    .addComponent(jP_6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jP_5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jP_7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(44, 44, 44)))
+                .addContainerGap(638, Short.MAX_VALUE))
         );
 
         pack();
@@ -175,6 +444,10 @@ public class Main extends javax.swing.JFrame {
 
     private void jB_RandomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_RandomActionPerformed
         // TODO add your handling code here:
+        toplama=0;
+        carpma=0;
+        dongu=0;
+        ControlLabel(true);
         int rows, column;
         Random rand = new Random();
         rows = rand.nextInt(5) + 1;
@@ -185,7 +458,7 @@ public class Main extends javax.swing.JFrame {
             }
         }
 
-        int[][] matris = new int[rows][column];
+        double[][] matris = new double[rows][column];
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < column; j++) {
@@ -201,15 +474,76 @@ public class Main extends javax.swing.JFrame {
         if (rows > column) {
             jL_M.setVisible(true);
             jL_N.setVisible(false);
+            jL_1.setText("A^t * A = ");
+            jL_2.setText("B^-1 * A = ");
+            MatrixGUI(matris.length, matris[0].length, matris, jP_2);
+            jP_2.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double transpoze[][] = Transpose(matris);
+            MatrixGUI(transpoze.length, transpoze[0].length, transpoze, jP_1);
+            jP_1.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double tersgirdi[][] = matriscarp(transpoze, matris);
+            MatrixGUI(tersgirdi.length, tersgirdi[0].length, tersgirdi, jP_3);
+            jP_3.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double terscikti[][] = MatrixInverse(tersgirdi);
+            MatrixGUI(terscikti.length, terscikti[0].length, terscikti, jP_4);
+            jP_4.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            MatrixGUI(terscikti.length, terscikti[0].length, terscikti, jP_5);
+            jP_5.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            MatrixGUI(transpoze.length, transpoze[0].length, transpoze, jP_6); 
+            jP_6.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double sonuc[][] = matriscarp(terscikti, transpoze);
+            MatrixGUI(sonuc.length, sonuc[0].length, sonuc, jP_7);
+            jP_7.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            matrisyaz(sonuc);
         } else {
             jL_M.setVisible(false);
             jL_N.setVisible(true);
+            jL_1.setText("A * A^t = ");
+            jL_2.setText("A^t * B^-1 = ");
+            
+            MatrixGUI(matris.length, matris[0].length, matris, jP_1);
+            jP_1.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double transpoze[][] = Transpose(matris);
+            MatrixGUI(transpoze.length, transpoze[0].length, transpoze, jP_2);
+            jP_2.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double tersgirdi[][] = matriscarp(matris, transpoze);
+            MatrixGUI(tersgirdi.length, tersgirdi[0].length, tersgirdi, jP_3);
+            jP_3.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double terscikti[][] = MatrixInverse(tersgirdi);
+            MatrixGUI(terscikti.length, terscikti[0].length, terscikti, jP_4);
+            jP_4.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            
+            MatrixGUI(transpoze.length, transpoze[0].length, transpoze, jP_5); 
+            jP_5.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            MatrixGUI(terscikti.length, terscikti[0].length, terscikti, jP_6);
+            jP_6.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double sonuc[][] = matriscarp(transpoze, terscikti);
+            MatrixGUI(sonuc.length, sonuc[0].length, sonuc, jP_7);
+            jP_7.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            matrisyaz(sonuc);
         }
+        
+        jL_top.setText("Toplama : "+toplama);
+        jL_Carp.setText("Çarpma : "+carpma);
+        jL_Dongu.setText("Dongu : "+dongu);
 
     }//GEN-LAST:event_jB_RandomActionPerformed
 
     private void jB_ManuelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_ManuelActionPerformed
         // TODO add your handling code here:
+        carpma=0;
+        toplama=0;
+        dongu=0;
+        ControlLabel(true);
         int rows, column;
 
         while (true) {
@@ -227,23 +561,80 @@ public class Main extends javax.swing.JFrame {
             }
         }
 
-        int[][] matris = new int[rows][column];
+        double[][] matris = new double[rows][column];
         int value;
 
         for (int i = 0; i < matris.length; i++) {
             for (int j = 0; j < matris[0].length; j++) {
                 String tmp = JOptionPane.showInputDialog("Matris[" + i + "][" + j + "] elemanını giriniz: ");
-                matris[i][j] = Integer.parseInt(tmp);
+                matris[i][j] = Double.parseDouble(tmp);
             }
         }
 
         if (rows > column) {
             jL_M.setVisible(true);
             jL_N.setVisible(false);
+            jL_1.setText("A^t * A = ");
+            jL_2.setText("B^-1 * A = ");
+            MatrixGUI(matris.length, matris[0].length, matris, jP_2);
+            jP_2.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double transpoze[][] = Transpose(matris);
+            MatrixGUI(transpoze.length, transpoze[0].length, transpoze, jP_1);
+            jP_1.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double tersgirdi[][] = matriscarp(transpoze, matris);
+            MatrixGUI(tersgirdi.length, tersgirdi[0].length, tersgirdi, jP_3);
+            jP_3.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double terscikti[][] = MatrixInverse(tersgirdi);
+            MatrixGUI(terscikti.length, terscikti[0].length, terscikti, jP_4);
+            jP_4.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            MatrixGUI(terscikti.length, terscikti[0].length, terscikti, jP_5);
+            jP_5.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            MatrixGUI(transpoze.length, transpoze[0].length, transpoze, jP_6); 
+            jP_6.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double sonuc[][] = matriscarp(terscikti, transpoze);
+            MatrixGUI(sonuc.length, sonuc[0].length, sonuc, jP_7);
+            jP_7.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            matrisyaz(sonuc);
         } else {
             jL_M.setVisible(false);
             jL_N.setVisible(true);
+            jL_1.setText("A * A^t = ");
+            jL_2.setText("A^t * B^-1 = ");
+            
+            MatrixGUI(matris.length, matris[0].length, matris, jP_1);
+            jP_1.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double transpoze[][] = Transpose(matris);
+            MatrixGUI(transpoze.length, transpoze[0].length, transpoze, jP_2);
+            jP_2.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double tersgirdi[][] = matriscarp(matris, transpoze);
+            MatrixGUI(tersgirdi.length, tersgirdi[0].length, tersgirdi, jP_3);
+            jP_3.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double terscikti[][] = MatrixInverse(tersgirdi);
+            MatrixGUI(terscikti.length, terscikti[0].length, terscikti, jP_4);
+            jP_4.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            
+            MatrixGUI(transpoze.length, transpoze[0].length, transpoze, jP_5); 
+            jP_5.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            MatrixGUI(terscikti.length, terscikti[0].length, terscikti, jP_6);
+            jP_6.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            
+            double sonuc[][] = matriscarp(transpoze, terscikti);
+            MatrixGUI(sonuc.length, sonuc[0].length, sonuc, jP_7);
+            jP_7.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.BLACK));
+            matrisyaz(sonuc);
         }
+        
+        jL_top.setText("Toplama : "+toplama);
+        jL_Carp.setText("Çarpma : "+carpma);
+        jL_Dongu.setText("Dongu : "+dongu);
 
     }//GEN-LAST:event_jB_ManuelActionPerformed
 
@@ -285,8 +676,26 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jB_Manuel;
     private javax.swing.JButton jB_Random;
+    private javax.swing.JLabel jL_1;
+    private javax.swing.JLabel jL_2;
+    private javax.swing.JLabel jL_Carp;
+    private javax.swing.JLabel jL_Dongu;
     private javax.swing.JLabel jL_M;
     private javax.swing.JLabel jL_N;
+    private javax.swing.JLabel jL_top;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jP_1;
+    private javax.swing.JPanel jP_2;
+    private javax.swing.JPanel jP_3;
+    private javax.swing.JPanel jP_4;
+    private javax.swing.JPanel jP_5;
+    private javax.swing.JPanel jP_6;
+    private javax.swing.JPanel jP_7;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
